@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Connection Test</title>
+</head>
+<body>
+  <div id="message-container">Loading...</div>
+
+  <script>
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbx_R1ywl4RdQwdXKtjBsl3gn893j4XER965daU41Yl3u3ISLtzkoxcDRLRlNdnnuVwr3A/exec"; // ***REPLACE with your Apps Script URL***
+
+    window.onload = function() {
+      const currentOrigin = window.location.origin;
+      fetch(`${appsScriptUrl}?origin=${currentOrigin}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Response:", data);
+          document.getElementById("message-container").textContent = data.message;
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          document.getElementById("message-container").textContent = "Error connecting.";
+        });
+    };
+  </script>
+</body>
+</html>
