@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+  <script>
+    fetch("YOUR_APPS_SCRIPT_URL") // ***REPLACE with the deployed URL***
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error("Error:", error));
+  </script>
+</body>
+</html>
