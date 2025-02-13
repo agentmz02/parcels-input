@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Form</title></head>
+<body>
+  <form id="testForm">
+    <input type="text" name="testField" value="Test Value">
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    const testForm = document.getElementById('testForm');
+    const testScriptURL = 'https://script.google.com/macros/s/AKfycbyFOrIGF74LVnGmo13N74ahVmesiRgE8fDM2OIKAiatNYqO1iB-FWUXtoZ0Ia2I8H3lHQ/exec'; // **REPLACE with your URL**
+
+    testForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const testFormData = new FormData(testForm);
+
+      fetch(testScriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(testFormData.entries()))
+      })
+    .then(response => response.json())
+    .then(data => console.log("Success:", data)) // Log success
+    .catch(error => console.error("Fetch Error:", error)); // Log fetch errors
+    });
+  </script>
+</body>
+</html>
