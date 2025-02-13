@@ -17,7 +17,7 @@
 
   <script>
     function getSheetData() {
-      var url = 'https://script.google.com/macros/s/AKfycbx-fUnuQmv2N0drzQBfXQt6XwrRT8OaklzMS24CBtMSYZpWYZoqsg-VQk0gjsgOHXEDiA/exec'; // **REPLACE WITH YOUR WEB APP URL**
+      var url = 'https://script.google.com/macros/s/AKfycbxpS8BqS4HLhYvqR8Y-Rukdn_yZQQCDlPWZ7Re8Y_IiIOHlZHppfIln_Cr0p6arcDJDSQ/exec'; // **REPLACE WITH YOUR WEB APP URL**
 
       fetch(url + '?action=getSheetData') // Use query parameter for GET
         .then(response => response.json())
@@ -51,7 +51,7 @@
 
 
     function writeData() {
-      var url = 'https://script.google.com/macros/s/AKfycbx-fUnuQmv2N0drzQBfXQt6XwrRT8OaklzMS24CBtMSYZpWYZoqsg-VQk0gjsgOHXEDiA/exec'; // **REPLACE WITH YOUR WEB APP URL**
+      var url = 'https://script.google.com/macros/s/AKfycbxpS8BqS4HLhYvqR8Y-Rukdn_yZQQCDlPWZ7Re8Y_IiIOHlZHppfIln_Cr0p6arcDJDSQ/exec'; // **REPLACE WITH YOUR WEB APP URL**
       var newData = [document.getElementById("new-data").value];
 
       fetch(url, {
