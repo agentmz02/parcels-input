@@ -3,7 +3,7 @@
 <head><title>Test</title></head>
 <body>
   <script>
-    fetch("https://script.google.com/macros/s/AKfycbwdm7wkZWuyW4dqggeNKp-xvSb6d5BtGmKDb_HYdmalyLOMhnSjgbOg5eOZI-SyU0io/exec") // ***REPLACE with the deployed URL***
+    fetch("https://script.google.com/macros/s/AKfycbwdm7wkZWuyW4dqggeNKp-xvSb6d5BtGmKDb_HYdmalyLOMhnSjgbOg5eOZI-SyU0io/exec", { mode: 'no-cors' }) // ***REPLACE with the deployed URL***
     .then(response => response.text())
     .then(data => console.log(data))
     .catch(error => console.error("Error:", error));
