@@ -22,6 +22,18 @@
     .then(response => response.json())
     .then(data => console.log("Success:", data)) // Log success
     .catch(error => console.error("Fetch Error:", error)); // Log fetch errors
+      const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzhxoX-GxfZSnxtstvWpX7Bx32iP2MiIFmBusyz5IjOran4UacbiNWmlEE_7jEJrQsfFQ/exec"; // Your Apps Script URL
+
+// Get the current origin (important!)
+const currentOrigin = window.location.origin;
+
+fetch(`${appsScriptUrl}?origin=${currentOrigin}`) // Add origin as query parameter
+  .then(response => {
+    // ... (rest of your fetch code)
+  })
+  .catch(error => {
+    // ... (error handling)
+  });
     });
   </script>
 </body>
