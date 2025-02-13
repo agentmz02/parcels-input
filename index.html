@@ -1,0 +1,74 @@
+// Client-side (HTML - index.html)
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Sheets Communication Test</title>
+</head>
+<body>
+  <h1>Google Sheets Test</h1>
+
+  <button onclick="getSheetData()">Get Sheet Data</button>
+  <div id="data-display"></div>
+
+  <form id="data-form">
+    <input type="text" id="new-data" placeholder="Enter data">
+    <button type="button" onclick="writeData()">Write Data</button>
+  </form>
+
+  <script>
+    function getSheetData() {
+      var url = 'https://script.google.com/macros/s/AKfycbx-fUnuQmv2N0drzQBfXQt6XwrRT8OaklzMS24CBtMSYZpWYZoqsg-VQk0gjsgOHXEDiA/exec'; // **REPLACE WITH YOUR WEB APP URL**
+
+      fetch(url + '?action=getSheetData') // Use query parameter for GET
+        .then(response => response.json())
+        .then(data => {
+          console.log("Data from sheet:", data);
+          displayData(data);
+        })
+        .catch(error => console.error("Error fetching data:", error));
+    }
+
+    function displayData(data) {
+      const displayDiv = document.getElementById('data-display');
+      displayDiv.innerHTML = ''; // Clear previous data
+
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach(row => {
+          const rowDiv = document.createElement('div');
+          row.forEach(cell => {
+            const cellSpan = document.createElement('span');
+            cellSpan.textContent = cell;
+            cellSpan.style.marginRight = '10px'; // Add spacing
+            rowDiv.appendChild(cellSpan);
+          });
+          displayDiv.appendChild(rowDiv);
+        });
+      } else {
+        displayDiv.textContent = 'No data found in sheet.';
+      }
+
+    }
+
+
+    function writeData() {
+      var url = 'https://script.google.com/macros/s/AKfycbx-fUnuQmv2N0drzQBfXQt6XwrRT8OaklzMS24CBtMSYZpWYZoqsg-VQk0gjsgOHXEDiA/exec'; // **REPLACE WITH YOUR WEB APP URL**
+      var newData = [document.getElementById("new-data").value];
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded' // Important for POST
+        },
+        body: 'action=writeDataToSheet&data=' + JSON.stringify(newData) // Encode data
+      })
+      .then(response => response.json()) // Expect JSON response
+      .then(data => {
+        console.log("Response after writing:", data); // Log the server's response
+        document.getElementById("data-form").reset(); // Clear the form
+        getSheetData(); // Refresh data display
+      })
+      .catch(error => console.error("Error writing data:", error));
+    }
+  </script>
+</body>
+</html>
