@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Google Sheets Data</title>
+</head>
+<body>
+  <div id="data-container"></div>
+
+  <script>
+    const sheetId = '1SyDegTVy6ul04vpqmBsl3PuBXw97rLaxY2nQ3dWepu0';       // **REPLACE with your Sheet ID**
+    const sheetRange = 'Sheet1!A1:B10';  // **REPLACE with your range**
+    const cloudFunctionUrl = 'https://europe-west9-teste-project-450615.cloudfunctions.net/get_sheet_data'; // **REPLACE with your Cloud Function URL + /get_data**
+
+    // Construct the URL with query parameters:
+    const apiUrl = `${cloudFunctionUrl}?sheet_id=${sheetId}&range=${sheetRange}`;  // Corrected URL construction
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(err => {throw new Error(err)});
+        }
+        return response.json();
+      })
+      .then(data => {
+        // ... (rest of your data processing and display code)
+      })
+      .catch(error => {
+        // ... (error handling code)
+      });
+  </script>
+</body>
+</html>
