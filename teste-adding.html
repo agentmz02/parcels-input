@@ -4,22 +4,26 @@
 <title>Google Sheets Data Insertion Test</title>
 </head>
 <body>
-  <button onclick="insertData()">Insert Data</button>
+  <input type="number" id="numberInput" placeholder="Enter a number">
+  <button onclick="insertData()">Insert Number</button>
   <div id="message"></div>
 
   <script>
     const sheetId = '1SyDegTVy6ul04vpqmBsl3PuBXw97rLaxY2nQ3dWepu0';       // **REPLACE with your Sheet ID**
-    const sheetRange = 'Sheet1!A1:B2';  // **REPLACE with your range**
     const cloudFunctionUrl = 'https://europe-west9-teste-project-450615.cloudfunctions.net/get_sheet_data/insert_data'; // **REPLACE with your Cloud Function URL + /insert_data**
 
     function insertData() {
+      const number = document.getElementById('numberInput').value;
+
+      if (!number) {
+        alert("Please enter a number.");
+        return;
+      }
+
       const data = {
         sheet_id: sheetId,
-        range: sheetRange,
-        values: [
-          ["Row 1, Cell 1", "Row 1, Cell 2"],
-          ["Row 2, Cell 1", "Row 2, Cell 2"]
-        ]
+        range: 'Sheet1!A1', // Fixed range: A1
+        values: [[number]] // Send the number as a 2D array
       };
 
       fetch(cloudFunctionUrl, {
