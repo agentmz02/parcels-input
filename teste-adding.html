@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Google Sheets Data Insertion Test</title>
+</head>
+<body>
+  <button onclick="insertData()">Insert Data</button>
+  <div id="message"></div>
+
+  <script>
+    const sheetId = '1SyDegTVy6ul04vpqmBsl3PuBXw97rLaxY2nQ3dWepu0';       // **REPLACE with your Sheet ID**
+    const sheetRange = 'Sheet1!A1:B2';  // **REPLACE with your range**
+    const cloudFunctionUrl = 'https://europe-west9-teste-project-450615.cloudfunctions.net/get_sheet_data/insert_data'; // **REPLACE with your Cloud Function URL + /insert_data**
+
+    function insertData() {
+      const data = {
+        sheet_id: sheetId,
+        range: sheetRange,
+        values: [
+          ["Row 1, Cell 1", "Row 1, Cell 2"],
+          ["Row 2, Cell 1", "Row 2, Cell 2"]
+        ]
+      };
+
+      fetch(cloudFunctionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(err => {throw new Error(err)});
+        }
+        return response.json();
+      })
+      .then(responseData => {
+        document.getElementById('message').textContent = responseData.message;
+        console.log("Response:", responseData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = `Error: ${error.message}`;
+      });
+    }
+  </script>
+</body>
+</html>
