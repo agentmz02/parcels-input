@@ -9,7 +9,7 @@
   <div id="message"></div>
 
   <script>
-    const sheetId = '1SyDegTVy6ul04vpqmBsl3PuBXw97rLaxY2nQ3dWepu0';       // **REPLACE with your Sheet ID**
+    const sheetId = '1SyDegTVy6ul04vpqmBsl3PuBXw97rLaxY2nQ3dWepu0'; // **REPLACE with your Sheet ID**
     const cloudFunctionUrl = 'https://europe-west9-teste-project-450615.cloudfunctions.net/get_sheet_data/insert_data'; // **REPLACE with your Cloud Function URL + /insert_data**
 
     function insertData() {
@@ -22,14 +22,18 @@
 
       const data = {
         "sheet_id": sheetId,
-        "range": 'teste!A3', // Fixed range: A1
-        "values": [[number]] // Send the number as a 2D array
+        "range": "teste!A3",
+        "values": [[number]]
       };
+
+      console.log("DEBUG: sheetId:", sheetId);
+      console.log("DEBUG: Data object:", data);
+      console.log("DEBUG: Stringified data:", JSON.stringify(data));
 
       fetch(cloudFunctionUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
       })
