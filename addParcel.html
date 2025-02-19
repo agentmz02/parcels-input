@@ -78,64 +78,45 @@
     }
 
     function submitData() {
-      const columnMapping = {
-            date: "date",
-            description: "description",
-            quantity: "quantity",
-            dimensionC: "dimensionC",
-            dimensionL: "dimensionL",
-            dimensionA: "dimensionA",
-            weight: "weight",
-            destination: "destination",
-            recipientName: "recipientName",
-            clientCode: "clientCode",
-            itemType: "itemType"
-        };
-
-      const allParcelData = [];
-      for (let i = 0; i < parcelCount; i++) {
+    const allParcelData = [];
+    for (let i = 0; i < parcelCount; i++) {
         const parcelData = {
-          date: document.getElementById(`date${i}`).value,
-          description: document.getElementById(`description${i}`).value,
-          quantity: document.getElementById(`quantity${i}`).value,
-          dimensionC: document.getElementById(`dimensionC${i}`).value,
-          dimensionL: document.getElementById(`dimensionL${i}`).value,
-          dimensionA: document.getElementById(`dimensionA${i}`).value,
-          weight: document.getElementById(`weight${i}`).value,
-          destination: document.getElementById(`destination${i}`).value,
-          recipientName: document.getElementById(`recipientName${i}`).value,
-          clientCode: document.getElementById(`clientCode${i}`).value,
-          itemType: document.getElementById(`itemType${i}`).value,
+            date: document.getElementById(`date${i}`).value,
+            description: document.getElementById(`description${i}`).value,
+            quantity: document.getElementById(`quantity${i}`).value,
+            dimensionC: document.getElementById(`dimensionC${i}`).value,
+            dimensionL: document.getElementById(`dimensionL${i}`).value,
+            dimensionA: document.getElementById(`dimensionA${i}`).value,
+            weight: document.getElementById(`weight${i}`).value,
+            destination: document.getElementById(`destination${i}`).value,
+            recipientName: document.getElementById(`recipientName${i}`).value,
+            clientCode: document.getElementById(`clientCode${i}`).value,
+            itemType: document.getElementById(`itemType${i}`).value,
         };
+        allParcelData.push(parcelData);
+    }
 
-        const orderedData = [];
-        for (const key in columnMapping) {
-          orderedData.push(parcelData[key]);
-        }
-        allParcelData.push(orderedData);
-      }
-
-      fetch(cloudFunctionUrl, {
+    fetch(cloudFunctionUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          sheet_id: sheetId,
-          sheet_name: "Calcula Preco",
-          values: allParcelData
+            sheet_id: sheetId,
+            sheet_name: "Calcula Preco",
+            values: allParcelData
         })
-      })
-      .then(response => response.json())
-      .then(responseData => {
+    })
+    .then(response => response.json())
+    .then(responseData => {
         document.getElementById('message').textContent = responseData.message;
         console.log("Response:", responseData);
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         console.error('Error:', error);
         document.getElementById('message').textContent = `Error: ${error.message}`;
-      });
-    }
+    });
+}
 
     // Add the first set of parcel inputs when the page loads
     addParcel();
