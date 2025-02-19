@@ -1,49 +1,134 @@
-function submitData() {
-    // ... (data collection) ...
+<!DOCTYPE html>
+<html>
+<head>
+<title>Parcel Data Entry</title>
+</head>
+<body>
+  <form id="parcelForm">
+    <div id="parcelContainer">
+      </div>
 
-    const columnMapping = {
-        date: "Date",
-        description: "Description",
-        quantity: "Quantity",
-        dimensionC: "C (cm)",
-        dimensionL: "L (cm)",
-        dimensionA: "A (cm)",
-        weight: "Weight",
-        destination: "Destination",
-        recipientName: "Nome do Recipiente",
-        clientCode: "Cliente",
-        itemType: "Tipo de encomenda"
-    };
+    <button type="button" onclick="addParcel()">Add Parcel</button>
+    <button type="button" onclick="submitData()">Submit</button>
+  </form>
 
-    const allParcelData = [];
-    for (let i = 0; i < parcelCount; i++) {
+  <div id="message"></div>
+
+  <script>
+    const sheetId = 'YOUR_SHEET_ID'; // Replace with your Sheet ID
+    const cloudFunctionUrl = 'YOUR_CLOUD_FUNCTION_URL/insert_data'; // Replace with your Cloud Function URL
+    const parcelContainer = document.getElementById('parcelContainer');
+    let parcelCount = 0; // Track the number of parcel input sets
+
+    function createParcelInputs(index) {
+      const parcelDiv = document.createElement('div');
+      parcelDiv.innerHTML = `
+        <h3>Parcel ${index + 1}</h3>
+        <label for="date${index}">Date:</label>
+        <input type="date" id="date${index}" name="date${index}" value="<?php echo date('Y-m-d'); ?>"><br><br>
+        <label for="description${index}">Description:</label>
+        <input type="text" id="description${index}" name="description${index}"><br><br>
+        <label for="quantity${index}">Quantity:</label>
+        <input type="number" id="quantity${index}" name="quantity${index}"><br><br>
+        <label for="dimensionC${index}">C (cm):</label>
+        <input type="number" id="dimensionC${index}" name="dimensionC${index}"><br><br>
+        <label for="dimensionL${index}">L (cm):</label>
+        <input type="number" id="dimensionL${index}" name="dimensionL${index}"><br><br>
+        <label for="dimensionA${index}">A (cm):</label>
+        <input type="number" id="dimensionA${index}" name="dimensionA${index}"><br><br>
+        <label for="weight${index}">Peso (kg):</label>
+        <input type="number" id="weight${index}" name="weight${index}"><br><br>
+        <label for="destination${index}">Destination:</label>
+        <select id="destination${index}" name="destination${index}">
+          <option value="Quelimane">Quelimane</option>
+          <option value="Nampula">Nampula</option>
+          <option value="Beira">Beira</option>
+        </select><br><br>
+        <label for="recipientName${index}">Nome do Recipiente:</label>
+        <input type="text" id="recipientName${index}" name="recipientName${index}"><br><br>
+        <label for="clientCode${index}">Cliente:</label>
+        <select id="clientCode${index}" name="clientCode${index}">
+          <option value="FSTWAY">FSTWAY</option>
+          <option value="CYASSIN">CYASSIN</option>
+        </select><br><br>
+        <label for="itemType${index}">Tipo de encomenda:</label>
+        <select id="itemType${index}" name="itemType${index}">
+          <option value="Normal">Normal</option>
+          <option value="Fresh">Fresh</option>
+          <option value="Food">Food</option>
+          <option value="Fragil">Fragil</option>
+        </select><br><br>
+      `;
+      parcelContainer.appendChild(parcelDiv);
+    }
+
+    function addParcel() {
+      createParcelInputs(parcelCount);
+      parcelCount++;
+    }
+
+    function submitData() {
+      const columnMapping = {
+            date: "date",
+            description: "description",
+            quantity: "quantity",
+            dimensionC: "dimensionC",
+            dimensionL: "dimensionL",
+            dimensionA: "dimensionA",
+            weight: "weight",
+            destination: "destination",
+            recipientName: "recipientName",
+            clientCode: "clientCode",
+            itemType: "itemType"
+        };
+
+      const allParcelData = [];
+      for (let i = 0; i < parcelCount; i++) {
         const parcelData = {
-            date: document.getElementById(`date${i}`).value,
-            description: document.getElementById(`description${i}`).value,
-            quantity: document.getElementById(`quantity${i}`).value,
-            dimensionC: document.getElementById(`dimensionC${i}`).value,
-            dimensionL: document.getElementById(`dimensionL${i}`).value,
-            dimensionA: document.getElementById(`dimensionA${i}`).value,
-            weight: document.getElementById(`weight${i}`).value,
-            destination: document.getElementById(`destination${i}`).value,
-            recipientName: document.getElementById(`recipientName${i}`).value,
-            clientCode: document.getElementById(`clientCode${i}`).value,
-            itemType: document.getElementById(`itemType${i}`).value,
+          date: document.getElementById(`date${i}`).value,
+          description: document.getElementById(`description${i}`).value,
+          quantity: document.getElementById(`quantity${i}`).value,
+          dimensionC: document.getElementById(`dimensionC${i}`).value,
+          dimensionL: document.getElementById(`dimensionL${i}`).value,
+          dimensionA: document.getElementById(`dimensionA${i}`).value,
+          weight: document.getElementById(`weight${i}`).value,
+          destination: document.getElementById(`destination${i}`).value,
+          recipientName: document.getElementById(`recipientName${i}`).value,
+          clientCode: document.getElementById(`clientCode${i}`).value,
+          itemType: document.getElementById(`itemType${i}`).value,
         };
 
         const orderedData = [];
         for (const key in columnMapping) {
-            orderedData.push(parcelData[key]);
+          orderedData.push(parcelData[key]);
         }
         allParcelData.push(orderedData);
+      }
+
+      fetch(cloudFunctionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sheet_id: sheetId,
+          range: 'teste1!A1', // Change the range as needed
+          values: allParcelData
+        })
+      })
+      .then(response => response.json())
+      .then(responseData => {
+        document.getElementById('message').textContent = responseData.message;
+        console.log("Response:", responseData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = `Error: ${error.message}`;
+      });
     }
 
-    fetch(cloudFunctionUrl, {
-        // ...
-        body: JSON.stringify({
-            sheet_id: sheetId,
-            range: 'teste1!A1',
-            values: allParcelData
-        })
-    });
-}
+    // Add the first set of parcel inputs when the page loads
+    addParcel();
+  </script>
+</body>
+</html>
