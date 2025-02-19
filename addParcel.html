@@ -15,17 +15,27 @@
   <div id="message"></div>
 
   <script>
-    const sheetId = '1GUDhxOPCPx5_8uVYmPKu0jE6pirLxTbHEbR5vRS8Q5Y'; // Replace with your Sheet ID
-    const cloudFunctionUrl = 'https://europe-west9-teste-project-450615.cloudfunctions.net/get_sheet_data/insert_data'; // Replace with your Cloud Function URL
+    const sheetId = 'YOUR_SHEET_ID'; // Replace with your Sheet ID
+    const cloudFunctionUrl = 'YOUR_CLOUD_FUNCTION_URL/insert_data'; // Replace with your Cloud Function URL
     const parcelContainer = document.getElementById('parcelContainer');
     let parcelCount = 0; // Track the number of parcel input sets
 
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     function createParcelInputs(index) {
+      const today = new Date();
+      const formattedDate = formatDate(today);
+
       const parcelDiv = document.createElement('div');
       parcelDiv.innerHTML = `
         <h3>Parcel ${index + 1}</h3>
         <label for="date${index}">Date:</label>
-        <input type="date" id="date${index}" name="date${index}" value="<?php echo date('Y-m-d'); ?>"><br><br>
+        <input type="date" id="date${index}" name="date${index}" value="${formattedDate}"><br><br>
         <label for="description${index}">Description:</label>
         <input type="text" id="description${index}" name="description${index}"><br><br>
         <label for="quantity${index}">Quantity:</label>
